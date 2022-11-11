@@ -20,18 +20,30 @@ const theme = {
   }
 };
 
+function ProviderWrapper(props){
+  return(
+    <ColorModeProvider initialMode={'light'}>
+      {props.children}
+    </ColorModeProvider>
+  )
+}
+
 function MyApp({Component, pageProps}){
   const themeActive = {theme}
   const contexto = React.useContext(ColorModeContext)
 
   return (
-    <ColorModeProvider>
-      <ThemeProvider theme={theme.light}>
-        <CSSReset />
-        <Component {...pageProps} />
-      </ ThemeProvider>
-    </ColorModeProvider>
+    <ThemeProvider theme={theme[contexto.mode]}>
+      <CSSReset />
+      <Component {...pageProps} />
+    </ ThemeProvider>
   )
 }
 
-export default MyApp
+export default function _App(props){
+  return(
+    <ProviderWrapper>
+      <MyApp {...props} />
+    </ ProviderWrapper>
+  )
+}
